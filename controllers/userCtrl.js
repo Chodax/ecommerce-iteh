@@ -31,7 +31,44 @@ const userCtrl = {
 
 
         }catch(err){
-            return res.status(500).json({msg: err.messagee})
+            return res.status(500).json({msg: err.message})
+        }
+    },
+    login: async (req, res)=>{
+        try{
+            const {email, password} = req.body;
+
+            const user = await Users.findOne({email})
+            if(!user) return res.status(400).json({msg: "User does not extst!"})
+
+            const isMatch = await bcrypt.compare(password, user.password)
+            if(!isMatch) return res.status(400).json({msg: "Incorrect password!"})
+
+            // If login success, create access token and refresh token
+            const accesstoken = createAccessToken({id: user._id})
+
+            res.json({accesstoken})
+
+        }catch(err){
+            return res.status(500).json({msg: err.message})
+        }
+    },
+    logout: async (req, res) =>{
+        try{
+            res.clearCookie('access_token', {path: '/user/logout'})
+            return res.json({msg: "Logged out"})
+        }catch(err){
+            return res.status(500).json({msg: err.message})
+        }
+    },
+    getUser: async (req, res) =>{
+        try {
+            const user = await Users.findById(req.user.id).select('-password')
+            if(!user) return res.status(500).json({msg: "User doesn't exist!"})
+
+            res.json(user)
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
         }
     }
 }

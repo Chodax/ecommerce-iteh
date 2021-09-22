@@ -19,14 +19,14 @@ const categoryCtrl = {
             const newCategory = new Category({name})
 
             await newCategory.save()
-            res.json({msg: "Create a category"})
+            res.json({msg: "Created a category"})
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
     },
     deleteCategory: async (req, res) =>{
         try{
-            await Category.findByIdAndDelete(req.params.id)
+            await Category.findOneAndDelete({_id: req.params.id})
             res.json({msg: "Deleted a category"})
         }catch(err){
             return res.status(500).json({msg: err.message})

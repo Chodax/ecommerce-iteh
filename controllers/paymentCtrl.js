@@ -5,7 +5,7 @@ const Products = require('../models/productModel')
 const paymentCtrl = {
     getPayments: async(req, res) => {
         try {
-            const payments = await Paymeents.find()
+            const payments = await Payments.find()
             res.json(payments)
         } catch (err) {
             return res.status(500).json({msg: err.message})
@@ -35,6 +35,7 @@ const paymentCtrl = {
         }
     }
 }
+
 const sold = async (id, quantity, oldSold) =>{
     await Products.findOneAndUpdate({_id: id}, {
         sold: quantity + oldSold

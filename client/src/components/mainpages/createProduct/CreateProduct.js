@@ -29,6 +29,8 @@ function CreateProduct() {
 
     const [products] = state.productsAPI.products
     const [onEdit, setOnEdit] = useState(false)
+    const [callback, setCallback] = state.productsAPI.callback
+
     useEffect(() => {
         if(param.id){
             setOnEdit(true)
@@ -50,7 +52,7 @@ function CreateProduct() {
         try {
             if(!isAdmin) return alert("You are not an admin!")
             const file = e.target.files[0]
-
+            
             if(!file) return alert("File does not exist!")
 
             if(file.size > 1024*1024) return alert("File too large!")
@@ -94,8 +96,8 @@ function CreateProduct() {
     const handleSubmit = async e =>{
         e.preventDefault()
         try {
-            if(!isAdmin) return alert("You are not an admin!")
-            if(!images) return alert("No image uploaded!")
+            if(!isAdmin) return alert("You're not an admin")
+            if(!images) return alert("No Image Upload")
 
             if(onEdit){
                 await axios.put(`/api/products/${product._id}`, {...product, images}, {
@@ -106,12 +108,8 @@ function CreateProduct() {
                     headers: {Authorization: token}
                 })
             }
-
-
-            setImages(false)
-            setProduct(initialState)
+            setCallback(!callback)
             history.push("/")
-
         } catch (err) {
             alert(err.response.data.msg)
         }

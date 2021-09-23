@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import BtnRender from './BtnRender'
 
 function ProductItem({product, isAdmin, deleteProduct, handleCheck}) {

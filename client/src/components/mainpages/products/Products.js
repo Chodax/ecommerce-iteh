@@ -3,6 +3,8 @@ import { GlobalState } from '../../../GlobalState'
 import ProductItem from '../utils/productItem/ProductItem'
 import Loading from '../utils/loading/Loading'
 import axios from 'axios'
+import Filters from './Filters'
+import LoadMore from './LoadMore'
 
 
 function Products() {
@@ -57,6 +59,8 @@ function Products() {
     if(loading) return <div><Loading /></div>
     return (
         <>
+        <Filters />
+        
         {
             isAdmin &&
             <div className="delete-all">
@@ -65,6 +69,7 @@ function Products() {
                 <button onClick={deleteAll}>Delete Selected</button>
             </div>
         }
+
         <div className="products">
             {
                 products.map(product => {
@@ -72,6 +77,8 @@ function Products() {
                 })
             }
         </div>
+
+        <LoadMore />
         {products.length === 0 && <Loading />}
         </>
     )

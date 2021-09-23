@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useContext} from 'react'
 import {GlobalState} from '../../GlobalState'
 import Menu from './icon/menu.svg'
 import Close from './icon/close.svg'
@@ -14,7 +14,7 @@ function Header() {
 
     const logoutUser = async () =>{
         await axios.get('/user/logout')
-        localStorage.clear()
+        localStorage.removeItem('firstLogin')
         window.location.href = "/";
     }
 

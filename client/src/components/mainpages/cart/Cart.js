@@ -7,6 +7,7 @@ function Cart() {
     const state = useContext(GlobalState)
     const [cart, setCart] = state.userAPI.cart
     const [token] = state.token
+    const [callback, setCallback] = state.userAPI.callback
     const [total, setTotal] = useState(0)
 
     useEffect(() => {
@@ -21,7 +22,7 @@ function Cart() {
         getTotal()
     }, [cart])
 
-    const addToCart = async () => {
+    const addToCart = async (cart) =>{
         await axios.patch('/user/addcart', {cart}, {
             headers: {Authorization: token}
         })
@@ -35,7 +36,7 @@ function Cart() {
         })
 
         setCart([...cart])
-        addToCart()
+        addToCart(cart)
     }
 
     const decrement = (id) => {
@@ -46,7 +47,7 @@ function Cart() {
         })
 
         setCart([...cart])
-        addToCart()
+        addToCart(cart)
     }
 
     const removeProduct = id => {
@@ -58,12 +59,21 @@ function Cart() {
             })
 
             setCart([...cart])
-            addToCart()
+            addToCart(cart)
         }
     }
 
     const tranSuccess = async(payment) => {
-        console.log(payment)
+        const {paymentID, address} = payment;
+
+        await axios.post('/api/payment', {cart, paymentID, address}, {
+            headers: {Authorization: token}
+        })
+
+        setCart([])
+        addToCart([])
+        alert("You have successfully placed an order!")
+        setCallback(!callback)
     }
 
     if(cart.length === 0)
